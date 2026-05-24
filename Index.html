@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      overflow:hidden;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(135deg, #ff4e8a, #7b2ff7);
+      color:white;
+      text-align:center;
+      position:relative;
+    }
+
+    .container{
+      padding:25px;
+      width:90%;
+      max-width:400px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      border-radius:25px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.2);
+      z-index:2;
+    }
+
+    h1{
+      font-size:2.5rem;
+      margin-bottom:15px;
+      animation: glow 2s infinite alternate;
+    }
+
+    p{
+      font-size:1.1rem;
+      line-height:1.6;
+      margin-bottom:20px;
+    }
+
+    .btn{
+      padding:12px 25px;
+      border:none;
+      border-radius:30px;
+      background:white;
+      color:#ff4081;
+      font-size:1rem;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .btn:hover{
+      transform:scale(1.08);
+    }
+
+    @keyframes glow{
+      from{
+        text-shadow:0 0 10px #fff;
+      }
+      to{
+        text-shadow:0 0 25px #fff, 0 0 40px #ffeb3b;
+      }
+    }
+
+    canvas{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+    }
+
+    @media(max-width:480px){
+      h1{
+        font-size:2rem;
+      }
+
+      p{
+        font-size:1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti"></canvas>
+
+  <div class="container">
+    <h1>🎂 Happy Birthday BACHAA  🎉</h1>
+
+    <p>
+      Wishing you endless happiness, love, success and beautiful memories.
+      May your special day be filled with smiles and joy ❤️
+    </p>
+
+    <button class="btn" onclick="blastConfetti()">
+      Celebrate 🎊
+    </button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let confettis = [];
+
+    function randomColor() {
+      const colors = [
+        "#ff0a54",
+        "#ff477e",
+        "#ff7096",
+        "#ff85a1",
+        "#fbb1bd",
+        "#f9bec7",
+        "#7b2ff7",
+        "#00e5ff"
+      ];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 150; i++) {
+        confettis.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          radius: Math.random() * 6 + 2,
+          color: randomColor(),
+          speed: Math.random() * 3 + 2,
+          tilt: Math.random() * 10 - 10
+        });
+      }
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      confettis.forEach((c, index) => {
+        ctx.beginPath();
+        ctx.fillStyle = c.color;
+        ctx.fillRect(c.x, c.y, c.radius, c.radius);
+
+        c.y += c.speed;
+        c.x += Math.sin(c.y * 0.01);
+
+        if (c.y > canvas.height) {
+          confettis.splice(index, 1);
+        }
+      });
+
+      requestAnimationFrame(drawConfetti);
+    }
+
+    function blastConfetti() {
+      createConfetti();
+    }
+
+    drawConfetti();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Auto confetti on load
+    createConfetti();
+  </script>
+
+</body>
+</html>
